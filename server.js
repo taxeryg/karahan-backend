@@ -115,17 +115,18 @@ app.post("/register", async (req, res) => {
         });
         res.json({ success: true, message: "Kayıt oldu!" });
     } catch (err) {
-        res.status(500).json({ success: false, message: "Hata" });
+        console.error("Register Hatası:", err); // Render loglarında görmek için
+        res.status(500).json({ success: false, message: "Server Hatası: " + err.message });
     }
 });
 
 // ---------- LOGIN ----------
 app.post("/login", async (req, res) => {
-    if (!usersCollection) return res.status(503).json({ success: false, message: "DB yok" });
+    if (!usersCollection) return res.status(503).json({ success: false, message: "Veritabanı bağlantısı yok" });
     const { username, password } = req.body;
     try {
         const snap = await usersCollection.where('username', '==', username).limit(1).get();
-        if (snap.empty) return res.status(401).json({ success: false, message: "Yanlış" });
+        if (snap.empty) return res.status(401).json({ success: false, message: "Kullanıcı bulunamadı" });
 
         const userDoc = snap.docs[0];
         const data = userDoc.data();
