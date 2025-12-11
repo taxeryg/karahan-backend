@@ -251,10 +251,19 @@ app.post("/api/reset-game", (req, res) => {
     res.json({ success: true });
 });
 
+// ---------- SAĞLIK KONTROLÜ (RENDER İÇİN) ----------
+app.get("/", (req, res) => {
+    res.send("Backend calisiyor! (v1.5)");
+});
+
 // ---------- BAŞLAT ----------
-startKickListener("karahank7"); // KANAL ADINI DEĞİŞTİR
+try {
+    startKickListener("karahank7"); // KANAL ADINI DEĞİŞTİR
+} catch (err) {
+    console.error("Kick Bot başlatılamadı (ÖNEMLİ DEĞİL, Server devam ediyor):", err);
+}
 
 server.listen(PORT, "0.0.0.0", () => {
-    console.log(`ANA SERVER ÇALIŞIYOR → https://karahanbest.netlify.app:${PORT}`);
+    console.log(`ANA SERVER ÇALIŞIYOR → ${PORT}`);
     console.log(`Frontend URL → ${CLIENT_URL}`);
 });
